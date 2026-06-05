@@ -1,0 +1,5 @@
+# Mechanical reformatting commits, skipped by git blame.
+# Apply locally with: git config blame.ignoreRevsFile .git-blame-ignore-revs
+
+# Apply ruff format
+7b96954c10424f774881ba76ec64b2bfdf952040
