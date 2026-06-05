@@ -23,7 +23,7 @@ def first_differences(terms: list[int]) -> list[int] | None:
     """
     if len(terms) < 2:
         return None
-    return [b - a for a, b in zip(terms, terms[1:])]
+    return [b - a for a, b in zip(terms, terms[1:], strict=False)]
 
 
 def partial_sums(terms: list[int]) -> list[int] | None:
@@ -44,7 +44,7 @@ def consecutive_ratios(terms: list[int]) -> list[int] | None:
     if len(terms) < 2:
         return None
     ratios: list[int] = []
-    for a, b in zip(terms, terms[1:]):
+    for a, b in zip(terms, terms[1:], strict=False):
         if a == 0 or b % a != 0:
             return None
         ratios.append(b // a)

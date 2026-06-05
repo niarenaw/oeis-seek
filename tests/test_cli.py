@@ -6,7 +6,8 @@ import json
 
 import pytest
 
-from seqseek import cli, index as index_mod
+from seqseek import cli
+from seqseek import index as index_mod
 
 
 def test_parse_terms_accepts_commas_and_whitespace():
