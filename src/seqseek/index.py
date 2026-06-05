@@ -107,9 +107,7 @@ def build(
                 (a_number, names.get(a_number, ""), frame_terms(terms), snapshot)
                 for a_number, terms in _iter_stripped(stripped_path)
             )
-            connection.executemany(
-                "INSERT OR REPLACE INTO sequences VALUES (?, ?, ?, ?)", rows
-            )
+            connection.executemany("INSERT OR REPLACE INTO sequences VALUES (?, ?, ?, ?)", rows)
             connection.commit()
             count = connection.execute("SELECT count(*) FROM sequences").fetchone()[0]
         finally:
@@ -130,9 +128,7 @@ class Index:
 
     @property
     def snapshot_date(self) -> str:
-        row = self._connection.execute(
-            "SELECT snapshot_date FROM sequences LIMIT 1"
-        ).fetchone()
+        row = self._connection.execute("SELECT snapshot_date FROM sequences LIMIT 1").fetchone()
         return row[0] if row else "unknown"
 
     @property
