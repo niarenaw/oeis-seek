@@ -1,0 +1,10 @@
+# Project-management workspace is tracked separately, not in app source control.
+.project-management/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+*.egg-info/
+

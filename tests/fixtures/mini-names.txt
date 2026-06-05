@@ -1,0 +1,6 @@
+# OEIS fixture names
+A000045 Fibonacci numbers.
+A005843 The even numbers.
+A000027 The natural numbers.
+A000079 Powers of 2.
+A999999 Big-integer fixture sequence.
