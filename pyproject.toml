@@ -14,7 +14,15 @@ seqseek = "seqseek.cli:main"
 [dependency-groups]
 dev = [
     "pytest>=8.0",
+    "ruff>=0.10",
 ]
+
+[tool.ruff]
+line-length = 100
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]
 
 [tool.uv]
 # Dependency cooldown to mitigate supply-chain attacks (https://cooldowns.dev/).
