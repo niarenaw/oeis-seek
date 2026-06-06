@@ -10,7 +10,7 @@ function. Every future surface (CLI today; web/API/MCP later) calls this.
 from __future__ import annotations
 
 from seqseek import rank
-from seqseek.index import Index
+from seqseek.index import Index, frame_terms
 from seqseek.matcher import find_matches
 from seqseek.models import Result
 from seqseek.transforms import REGISTRY
@@ -26,11 +26,21 @@ def identify(terms: list[int], index: Index, limit: int = 10) -> list[Result]:
     """
     normalized = strip_leading_zeros_and_ones([int(t) for t in terms])
     best: dict[str, Result] = {}
+    seen: set[str] = set()
 
-    for name, transform in REGISTRY.items():
+    # Iterate lowest-distance transforms first so a candidate produced by several
+    # transforms is scanned once and attributed to its strongest (lowest-distance)
+    # one. The seen-set is a pre-scan skip only; winner selection across distinct
+    # candidates remains the best-per-A-number-by-score comparison below.
+    ordered = sorted(REGISTRY.items(), key=lambda item: rank.distance(item[0]))
+    for name, transform in ordered:
         candidate = transform(normalized)
         if not candidate:
             continue
+        framed = frame_terms(candidate)
+        if framed in seen:
+            continue
+        seen.add(framed)
         for match in find_matches(candidate, index):
             result = Result(
                 a_number=match.a_number,
