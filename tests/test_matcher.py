@@ -25,6 +25,18 @@ def test_signs_are_respected(built_index):
     assert any(m.a_number == "A000027" for m in find_matches([2, 3, 4], built_index))
 
 
+def test_match_reports_mid_sequence_offset(built_index):
+    # 2,3,5,8 sits after 0,1,1 in Fibonacci, so its 0-based term offset is 3.
+    fib = next(m for m in find_matches([2, 3, 5, 8], built_index) if m.a_number == "A000045")
+    assert fib.position == 3
+
+
+def test_match_at_opening_has_position_zero(built_index):
+    # 1,2,3,4 opens the natural numbers, so the offset is 0 (no off-by-one on the frame).
+    nat = next(m for m in find_matches([1, 2, 3, 4], built_index) if m.a_number == "A000027")
+    assert nat.position == 0
+
+
 def test_big_integer_round_trip(built_index):
     big = 2**400
     run = [big, big + 1, big + 2, big + 3]

@@ -6,7 +6,74 @@ import json
 
 import pytest
 
-from seqseek import cli, index as index_mod
+from seqseek import cli
+from seqseek import index as index_mod
+from seqseek.models import Result
+
+_GOLDEN_RESULTS = [
+    Result(
+        a_number="A000045",
+        name="Fibonacci numbers",
+        transform="raw",
+        score=6.5,
+        matched_terms=[2, 3, 5, 8, 13, 21],
+        explanation="Direct match on 6 terms (transform distance 0).",
+    ),
+    Result(
+        a_number="A000044",
+        name="Dying rabbits",
+        transform="raw",
+        score=6.0,
+        matched_terms=[2, 3, 5, 8, 13, 21],
+        explanation="Direct match on 6 terms (transform distance 0).",
+    ),
+]
+
+_GOLDEN_HUMAN = """\
+Snapshot: January 01 2026
+
+1. A000045  Fibonacci numbers
+   transform  raw
+   confidence 6.5
+   matched    2, 3, 5, 8, 13, 21
+   why        Direct match on 6 terms (transform distance 0).
+   https://oeis.org/A000045
+
+2. A000044  Dying rabbits
+   transform  raw
+   confidence 6
+   matched    2, 3, 5, 8, 13, 21
+   why        Direct match on 6 terms (transform distance 0).
+   https://oeis.org/A000044"""
+
+
+def test_format_human_matches_golden():
+    out = cli.format_human(_GOLDEN_RESULTS, "January 01 2026", color=False)
+    assert out == _GOLDEN_HUMAN
+
+
+def test_format_human_separates_blocks_with_blank_line():
+    out = cli.format_human(_GOLDEN_RESULTS, "January 01 2026", color=False)
+    assert "\n\n2. A000044" in out
+
+
+def test_format_human_is_plain_without_color():
+    colored = cli.format_human(_GOLDEN_RESULTS, "January 01 2026", color=True)
+    plain = cli.format_human(_GOLDEN_RESULTS, "January 01 2026", color=False)
+    assert "\033[" in colored  # color requested -> escape codes present
+    assert "\033[" not in plain  # plain requested -> none
+
+
+def test_color_off_when_piped(monkeypatch):
+    monkeypatch.setattr("sys.stdout.isatty", lambda: False)
+    monkeypatch.delenv("NO_COLOR", raising=False)
+    assert cli._use_color() is False
+
+
+def test_color_off_when_no_color_set(monkeypatch):
+    monkeypatch.setattr("sys.stdout.isatty", lambda: True)
+    monkeypatch.setenv("NO_COLOR", "1")
+    assert cli._use_color() is False
 
 
 def test_parse_terms_accepts_commas_and_whitespace():

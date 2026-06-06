@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import re
 import sys
 
@@ -44,20 +45,50 @@ def _read_input(args_terms: list[str]) -> str:
     return ""
 
 
-def format_human(results: list[Result], snapshot: str) -> str:
-    lines: list[str] = []
+# Field labels are padded to a fixed column so values line up down each block.
+_LABEL_WIDTH = len("confidence")
+_PREVIEW_TERMS = 8
+_BOLD = "1"  # ANSI SGR codes, applied only on a TTY
+_DIM = "2"
+
+
+def _use_color() -> bool:
+    """Color only when writing to a terminal and NO_COLOR is unset."""
+    return sys.stdout.isatty() and os.environ.get("NO_COLOR") is None
+
+
+def _wrap(text: str, code: str, *, enabled: bool) -> str:
+    return f"\033[{code}m{text}\033[0m" if enabled else text
+
+
+def _field(label: str, value: str) -> str:
+    return f"   {label.ljust(_LABEL_WIDTH)} {value}"
+
+
+def format_human(results: list[Result], snapshot: str, *, color: bool | None = None) -> str:
+    """Render a scannable, aligned result block per match; plain when not a TTY."""
+    enabled = _use_color() if color is None else color
+    header = f"Snapshot: {snapshot}"
     if not results:
-        lines.append("No matches found.")
+        return f"{header}\n\nNo matches found."
+
+    blocks: list[str] = []
     for i, r in enumerate(results, 1):
-        preview = ", ".join(str(t) for t in r.matched_terms[:8])
-        lines.append(f"{i}. {r.a_number}  {r.name}")
-        lines.append(f"   transform: {r.transform}   confidence: {r.score:g}")
-        lines.append(f"   matched: {preview}")
-        lines.append(f"   {r.url}")
-        lines.append(f"   {r.explanation}")
-    lines.append("")
-    lines.append(f"(OEIS snapshot: {snapshot})")
-    return "\n".join(lines)
+        preview = ", ".join(str(t) for t in r.matched_terms[:_PREVIEW_TERMS])
+        lead = f"{i}. {_wrap(r.a_number, _BOLD, enabled=enabled)}  {r.name}"
+        blocks.append(
+            "\n".join(
+                [
+                    lead,
+                    _field("transform", r.transform),
+                    _field("confidence", f"{r.score:g}"),
+                    _field("matched", preview),
+                    _field("why", r.explanation),
+                    f"   {_wrap(r.url, _DIM, enabled=enabled)}",
+                ]
+            )
+        )
+    return f"{header}\n\n" + "\n\n".join(blocks)
 
 
 def format_json(results: list[Result], snapshot: str) -> str:

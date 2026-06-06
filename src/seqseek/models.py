@@ -16,6 +16,9 @@ class Match:
     a_number: str
     name: str
     matched_terms: list[int]
+    # 0-based term offset of the run's first occurrence within the stored
+    # sequence; an earlier offset is weak evidence the match is at the opening.
+    position: int = 0
 
 
 @dataclass(frozen=True)

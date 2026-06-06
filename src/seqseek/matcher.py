@@ -19,4 +19,14 @@ def find_matches(terms: list[int], index: Index) -> list[Match]:
         return []
     framed = frame_terms(terms)  # frame_terms canonicalizes terms to int
     rows = index.find_containing(framed)
-    return [Match(a_number=a, name=name, matched_terms=list(terms)) for a, name, _ in rows]
+    matches: list[Match] = []
+    for a_number, name, stored in rows:
+        # The stored string is comma-framed, so counting commas before the run's
+        # first occurrence yields its 0-based term offset (the leading comma is
+        # the boundary before term 0, so it is not counted).
+        offset = stored.index(framed)
+        position = stored.count(",", 0, offset)
+        matches.append(
+            Match(a_number=a_number, name=name, matched_terms=list(terms), position=position)
+        )
+    return matches
