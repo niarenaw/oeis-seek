@@ -31,14 +31,14 @@ import urllib.request
 from datetime import UTC, datetime
 from pathlib import Path
 
-from seqseek.download import USER_AGENT
+from seqseek.download import REQUEST_TIMEOUT, USER_AGENT
 
 SEARCH_URL = "https://oeis.org/search"
 QUERY = "keyword:core"
 MIN_EXPECTED = 160
 MAX_EXPECTED = 250
 PAGE_LIMIT = 100  # OEIS serves anonymous results only for start <= 100
-WINDOW_REACH = PAGE_LIMIT + 10  # results retrievable in one sort direction
+WINDOW_REACH = PAGE_LIMIT + 10  # one extra page of ~10 past the cap, per sort direction
 TWO_WINDOW_REACH = 2 * WINDOW_REACH  # ceiling the asc+desc union can cover
 OUTPUT = Path(__file__).resolve().parents[1] / "src" / "seqseek" / "data" / "core_sequences.txt"
 
@@ -48,7 +48,7 @@ _TOTAL = re.compile(r"Showing\s+\d+-\d+\s+of\s+(\d+)")
 
 def _fetch(url: str) -> tuple[int, str]:
     request = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
-    with urllib.request.urlopen(request, timeout=60) as response:
+    with urllib.request.urlopen(request, timeout=REQUEST_TIMEOUT) as response:
         return response.status, response.read().decode("utf-8")
 
 
@@ -97,7 +97,7 @@ def fetch_core_a_numbers() -> list[str]:
 
 
 def main() -> int:
-    unique = sorted(set(fetch_core_a_numbers()))
+    unique = fetch_core_a_numbers()  # already sorted and de-duplicated
     count = len(unique)
     if not all(_A_NUMBER.match(a) for a in unique):
         raise RuntimeError("fetched an entry that is not a canonical A-number")

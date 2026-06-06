@@ -48,6 +48,8 @@ def _read_input(args_terms: list[str]) -> str:
 # Field labels are padded to a fixed column so values line up down each block.
 _LABEL_WIDTH = len("confidence")
 _PREVIEW_TERMS = 8
+_BOLD = "1"  # ANSI SGR codes, applied only on a TTY
+_DIM = "2"
 
 
 def _use_color() -> bool:
@@ -73,7 +75,7 @@ def format_human(results: list[Result], snapshot: str, *, color: bool | None = N
     blocks: list[str] = []
     for i, r in enumerate(results, 1):
         preview = ", ".join(str(t) for t in r.matched_terms[:_PREVIEW_TERMS])
-        lead = f"{i}. {_wrap(r.a_number, '1', enabled=enabled)}  {r.name}"
+        lead = f"{i}. {_wrap(r.a_number, _BOLD, enabled=enabled)}  {r.name}"
         blocks.append(
             "\n".join(
                 [
@@ -82,7 +84,7 @@ def format_human(results: list[Result], snapshot: str, *, color: bool | None = N
                     _field("confidence", f"{r.score:g}"),
                     _field("matched", preview),
                     _field("why", r.explanation),
-                    f"   {_wrap(r.url, '2', enabled=enabled)}",
+                    f"   {_wrap(r.url, _DIM, enabled=enabled)}",
                 ]
             )
         )

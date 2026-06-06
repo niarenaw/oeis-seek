@@ -88,9 +88,7 @@ def divided_by_index(terms: list[int]) -> list[int] | None:
     if len(terms) < 2:
         return None
     quotients: list[int] = []
-    for n, a in enumerate(terms):
-        if n == 0:
-            continue
+    for n, a in enumerate(terms[1:], start=1):
         if a % n != 0:
             return None
         quotients.append(a // n)

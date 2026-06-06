@@ -10,11 +10,15 @@ function. Every future surface (CLI today; web/API/MCP later) calls this.
 from __future__ import annotations
 
 from seqseek import rank
-from seqseek.index import Index, frame_terms
+from seqseek.index import Index
 from seqseek.matcher import find_matches
 from seqseek.models import Result
 from seqseek.transforms import REGISTRY
 from seqseek.transforms.normalize import strip_leading_zeros_and_ones
+
+# Lowest-distance transforms first, computed once: a candidate produced by several
+# transforms is then scanned and attributed to its strongest (lowest-distance) one.
+_ORDERED_TRANSFORMS = sorted(REGISTRY.items(), key=lambda item: rank.distance(item[0]))
 
 
 def identify(terms: list[int], index: Index, limit: int = 10) -> list[Result]:
@@ -26,21 +30,20 @@ def identify(terms: list[int], index: Index, limit: int = 10) -> list[Result]:
     """
     normalized = strip_leading_zeros_and_ones([int(t) for t in terms])
     best: dict[str, Result] = {}
-    seen: set[str] = set()
+    seen: set[tuple[int, ...]] = set()
 
-    # Iterate lowest-distance transforms first so a candidate produced by several
-    # transforms is scanned once and attributed to its strongest (lowest-distance)
-    # one. The seen-set is a pre-scan skip only; winner selection across distinct
-    # candidates remains the best-per-A-number-by-score comparison below.
-    ordered = sorted(REGISTRY.items(), key=lambda item: rank.distance(item[0]))
-    for name, transform in ordered:
+    # The seen-set skips a redundant index scan when two transforms yield the same
+    # candidate; because _ORDERED_TRANSFORMS runs lowest-distance first, the kept
+    # scan is the strongest one. Winner selection across distinct candidates is the
+    # best-per-A-number-by-score comparison below.
+    for name, transform in _ORDERED_TRANSFORMS:
         candidate = transform(normalized)
         if not candidate:
             continue
-        framed = frame_terms(candidate)
-        if framed in seen:
+        key = tuple(candidate)
+        if key in seen:
             continue
-        seen.add(framed)
+        seen.add(key)
         for match in find_matches(candidate, index):
             result = Result(
                 a_number=match.a_number,
