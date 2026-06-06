@@ -1,5 +1,7 @@
 # seqseek
 
+[![CI](https://github.com/niarenaw/seqseek/actions/workflows/ci.yml/badge.svg)](https://github.com/niarenaw/seqseek/actions/workflows/ci.yml)
+
 Identify the OEIS sequence a list of integers belongs to - even when the raw
 numbers are not in OEIS but a simple transform of them is.
 
@@ -58,19 +60,39 @@ each result up:
 - **partial sums** - running totals
 - **consecutive ratios** - `a(n+1) / a(n)` (later over earlier), used only when
   every ratio divides exactly, e.g. `1, 2, 6, 24` becomes `2, 3, 4`
+- **higher-order differences** - first differences applied repeatedly (orders 2
+  and 3)
+- **a(n) - n** and **a(n) / n** - subtract or divide by the 0-based index (the
+  latter integer-only)
+- **absolute values** - `abs(a(n))`, to recognize a signed sequence by magnitude
 
 Transforms live in a registry, so adding more later is one function plus one
 registration.
 
 ### The ranking
 
-Every hit gets a deterministic, explainable score: matches needing no transform
-rank above transformed ones, more matched terms rank higher, and the scoring
-weights live in one place. Each result tells you which transform found it and
-why it ranked where it did.
+Every hit gets a deterministic, explainable score. Matches needing no transform
+rank above transformed ones, more matched terms rank higher, and sequences in
+OEIS's curated `core` set are boosted so canonical sequences outrank obscure ones
+that merely share a run. A run found near a sequence's opening is weak extra
+evidence over one buried deep inside, and ties resolve by ascending A-number so
+output is stable. All scoring weights live in one place, and each result tells
+you which transform found it and why it ranked where it did.
 
 ## Development
 
+Lint, format, and test:
+
 ```bash
+uv run ruff check .
+uv run ruff format .
 uv run pytest
+```
+
+CI runs ruff and pytest on every push and pull request.
+
+To refresh the embedded OEIS core set:
+
+```bash
+uv run python tools/generate_core_set.py
 ```
