@@ -1,12 +1,33 @@
 [project]
-name = "seqseek"
+name = "oeis-seek"
 version = "0.1.0"
 description = "Transform-aware identifier for OEIS integer sequences"
 readme = "README.md"
 requires-python = ">=3.11"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{ name = "niarenaw" }]
+keywords = ["oeis", "integer-sequences", "cli", "mathematics", "sequence"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Scientific/Engineering :: Mathematics",
+]
 dependencies = [
     "platformdirs>=4.0",
 ]
+
+[project.urls]
+Homepage = "https://github.com/niarenaw/seqseek"
+Repository = "https://github.com/niarenaw/seqseek"
+Issues = "https://github.com/niarenaw/seqseek/issues"
 
 [project.scripts]
 seqseek = "seqseek.cli:main"

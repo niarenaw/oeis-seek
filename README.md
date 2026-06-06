@@ -1,6 +1,8 @@
 # seqseek
 
 [![CI](https://github.com/niarenaw/seqseek/actions/workflows/ci.yml/badge.svg)](https://github.com/niarenaw/seqseek/actions/workflows/ci.yml)
+[![PyPI](https://img.shields.io/pypi/v/oeis-seek.svg)](https://pypi.org/project/oeis-seek/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 Identify the OEIS sequence a list of integers belongs to - even when the raw
 numbers are not in OEIS but a simple transform of them is.
@@ -10,6 +12,15 @@ numbers are not in OEIS but a simple transform of them is.
 sequences with no network calls and no rate limits.
 
 ## Install
+
+Install the released CLI from PyPI (the package is `oeis-seek`; it installs a
+`seqseek` command):
+
+```bash
+uv tool install oeis-seek    # or: pipx install oeis-seek, or: pip install oeis-seek
+```
+
+Or work from a clone:
 
 ```bash
 uv sync
