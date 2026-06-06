@@ -1,0 +1,44 @@
+name: Release
+
+# Publish to PyPI when a version tag (v*) is pushed. Trusted Publishing (OIDC)
+# mints a short-lived token at run time, so no API token is ever stored in the
+# repository or its secrets. The PyPI trusted publisher must be registered first
+# (project: oeis-seek, workflow: release.yml, environment: pypi). Tests run before
+# the build because a published version is immutable and cannot be replaced.
+#
+# pypa/gh-action-pypi-publish is a drop-in alternative if uv-native publishing is
+# ever unavailable.
+
+on:
+  push:
+    tags:
+      - "v*"
+
+# Least privilege: the workflow needs nothing from the repository token. The OIDC
+# id-token is granted only to the release job, the sole job that publishes.
+permissions: {}
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment:
+      name: pypi
+      url: https://pypi.org/p/oeis-seek
+    permissions:
+      id-token: write # mint the OIDC token Trusted Publishing exchanges with PyPI
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+        with:
+          persist-credentials: false
+      - name: Install uv
+        uses: astral-sh/setup-uv@f0ec1fc3b38f5e7cd731bb6ce540c5af426746bb # v6.1
+      - name: Sync dependencies
+        run: uv sync --frozen
+      - name: Test
+        run: uv run pytest
+      - name: Build the sdist and wheel
+        run: uv build
+      - name: Publish to PyPI via Trusted Publishing
+        run: uv publish --trusted-publishing always
