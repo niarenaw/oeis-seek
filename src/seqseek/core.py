@@ -54,5 +54,7 @@ def identify(terms: list[int], index: Index, limit: int = 10) -> list[Result]:
             if incumbent is None or result.score > incumbent.score:
                 best[match.a_number] = result
 
-    ranked = sorted(best.values(), key=lambda r: r.score, reverse=True)
+    # Highest score first, ascending A-number as the deterministic tiebreak so
+    # equal-scoring results always order the same way.
+    ranked = sorted(best.values(), key=lambda r: (-r.score, r.a_number))
     return ranked[:limit]

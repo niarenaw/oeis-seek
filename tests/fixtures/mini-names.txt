@@ -1,4 +1,5 @@
 # OEIS fixture names
+A000044 Dying rabbits: a(0) = 1; for 1 <= n <= 12, a(n) = Fibonacci(n).
 A000045 Fibonacci numbers.
 A005843 The even numbers.
 A000027 The natural numbers.
