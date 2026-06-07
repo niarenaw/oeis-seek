@@ -1,20 +1,20 @@
-# seqseek
+# oeis-seek
 
-[![CI](https://github.com/niarenaw/seqseek/actions/workflows/ci.yml/badge.svg)](https://github.com/niarenaw/seqseek/actions/workflows/ci.yml)
+[![CI](https://github.com/niarenaw/oeis-seek/actions/workflows/ci.yml/badge.svg)](https://github.com/niarenaw/oeis-seek/actions/workflows/ci.yml)
 [![PyPI](https://img.shields.io/pypi/v/oeis-seek.svg)](https://pypi.org/project/oeis-seek/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 Identify the OEIS sequence a list of integers belongs to - even when the raw
 numbers are not in OEIS but a simple transform of them is.
 
-`seqseek` works offline against a local copy of the
+`oeis-seek` works offline against a local copy of the
 [OEIS](https://oeis.org/) bulk dump. You download the dump once, then look up
 sequences with no network calls and no rate limits.
 
 ## Install
 
 Install the released CLI from PyPI (the package is `oeis-seek`; it installs a
-`seqseek` command):
+`oeis-seek` command):
 
 ```bash
 uv tool install oeis-seek    # or: pipx install oeis-seek, or: pip install oeis-seek
@@ -31,17 +31,17 @@ uv sync
 First, download and index the OEIS dump (one time; re-run to refresh):
 
 ```bash
-seqseek update
+oeis-seek update
 ```
 
 Then identify a sequence:
 
 ```bash
-seqseek 0,1,1,2,3,5,8,13          # -> A000045 (Fibonacci), raw match
-seqseek 2,6,12,20,30,42           # -> hit via first differences
-echo "1 2 6 24 120" | seqseek     # terms from stdin
-seqseek 2,6,12,20 --json          # machine-readable output
-seqseek 2,6,12,20 --limit 5       # cap results (default 10)
+oeis-seek 0,1,1,2,3,5,8,13          # -> A000045 (Fibonacci), raw match
+oeis-seek 2,6,12,20,30,42           # -> hit via first differences
+echo "1 2 6 24 120" | oeis-seek     # terms from stdin
+oeis-seek 2,6,12,20 --json          # machine-readable output
+oeis-seek 2,6,12,20 --limit 5       # cap results (default 10)
 ```
 
 Terms may be comma- or whitespace-separated, passed as arguments or piped on
@@ -63,7 +63,7 @@ second, so the MVP needs no inverted index.
 
 ### The transforms
 
-Before matching, `seqseek` also tries simple transforms of your input and looks
+Before matching, `oeis-seek` also tries simple transforms of your input and looks
 each result up:
 
 - **raw** - the input as given

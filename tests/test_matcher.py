@@ -2,8 +2,8 @@
 
 from __future__ import annotations
 
-from seqseek.index import frame_terms
-from seqseek.matcher import find_matches
+from oeis_seek.index import frame_terms
+from oeis_seek.matcher import find_matches
 
 
 def test_mid_sequence_run_matches(built_index):

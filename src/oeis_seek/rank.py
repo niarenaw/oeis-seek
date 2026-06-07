@@ -24,13 +24,13 @@ from __future__ import annotations
 
 import importlib.resources
 
-from seqseek.models import Match
+from oeis_seek.models import Match
 
 
 def _load_core_set() -> frozenset[str]:
     """Load the packaged OEIS core A-numbers, skipping the provenance header."""
     text = (
-        importlib.resources.files("seqseek")
+        importlib.resources.files("oeis_seek")
         .joinpath("data/core_sequences.txt")
         .read_text(encoding="utf-8")
     )

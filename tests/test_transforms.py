@@ -2,8 +2,8 @@
 
 from __future__ import annotations
 
-from seqseek.transforms import REGISTRY, builtin
-from seqseek.transforms.normalize import strip_leading_zeros_and_ones
+from oeis_seek.transforms import REGISTRY, builtin
+from oeis_seek.transforms.normalize import strip_leading_zeros_and_ones
 
 
 def test_registry_maps_names_to_callables_only():

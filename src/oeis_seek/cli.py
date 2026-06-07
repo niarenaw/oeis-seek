@@ -1,4 +1,4 @@
-"""The ``seqseek`` command: a thin formatter over :func:`seqseek.core.identify`.
+"""The ``oeis-seek`` command: a thin formatter over :func:`oeis_seek.core.identify`.
 
 Input parsing, the minimum-terms rule, input bounds, output formatting, and the
 ``update`` subcommand all live here. Identification itself is delegated to the
@@ -13,8 +13,8 @@ import os
 import re
 import sys
 
-from seqseek import core, download, index
-from seqseek.models import Result
+from oeis_seek import core, download, index
+from oeis_seek.models import Result
 
 DEFAULT_MIN_TERMS = 4
 DEFAULT_LIMIT = 10
@@ -126,7 +126,7 @@ def _run_update() -> int:
 def _run_lookup(args: argparse.Namespace) -> int:
     raw = _read_input(args.terms)
     if not raw.strip():
-        print("No terms given. Example: seqseek 2,6,12,20,30", file=sys.stderr)
+        print("No terms given. Example: oeis-seek 2,6,12,20,30", file=sys.stderr)
         return 2
     try:
         terms = parse_terms(raw)
@@ -145,7 +145,7 @@ def _run_lookup(args: argparse.Namespace) -> int:
     try:
         handle = index.open_index()
     except FileNotFoundError:
-        print("No local data - run `seqseek update` first.", file=sys.stderr)
+        print("No local data - run `oeis-seek update` first.", file=sys.stderr)
         return 3
 
     try:
@@ -160,9 +160,9 @@ def _run_lookup(args: argparse.Namespace) -> int:
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
-        prog="seqseek",
+        prog="oeis-seek",
         description="Identify the OEIS sequence a list of integers belongs to.",
-        epilog="Run `seqseek update` to download and index the OEIS bulk dump.",
+        epilog="Run `oeis-seek update` to download and index the OEIS bulk dump.",
     )
     parser.add_argument("terms", nargs="*", help="integer terms (comma/space separated)")
     parser.add_argument("--limit", type=int, default=DEFAULT_LIMIT, help="max results")

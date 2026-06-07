@@ -2,7 +2,7 @@
 
 Adding a post-MVP transform is one function in ``builtin.py`` (or a new tier
 module) plus one entry here. The registry maps a transform name to its callable
-only; scoring weights live in :mod:`seqseek.rank` so the two concerns stay
+only; scoring weights live in :mod:`oeis_seek.rank` so the two concerns stay
 separate. ``core.identify`` iterates this registry rather than naming transforms,
 so a newly registered transform participates without touching the fan-out.
 """
@@ -12,7 +12,7 @@ from __future__ import annotations
 import functools
 from collections.abc import Callable
 
-from seqseek.transforms import builtin
+from oeis_seek.transforms import builtin
 
 Transform = Callable[[list[int]], "list[int] | None"]
 
