@@ -6,7 +6,7 @@ from pathlib import Path
 
 import pytest
 
-from seqseek import index as index_mod
+from oeis_seek import index as index_mod
 
 FIXTURES = Path(__file__).parent / "fixtures"
 

@@ -20,7 +20,7 @@ import tempfile
 from collections.abc import Iterator
 from pathlib import Path
 
-from seqseek.download import CACHE_DIR
+from oeis_seek.download import CACHE_DIR
 
 INDEX_PATH = CACHE_DIR / "index.sqlite3"
 

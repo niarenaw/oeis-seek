@@ -23,7 +23,7 @@ class Match:
 
 @dataclass(frozen=True)
 class Result:
-    """A ranked identification, the public output of :func:`seqseek.identify`.
+    """A ranked identification, the public output of :func:`oeis_seek.identify`.
 
     ``score`` is the raw deterministic ranking key; the CLI presents it under the
     display label "confidence". It is a sort key, not a calibrated probability.

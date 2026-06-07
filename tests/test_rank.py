@@ -2,8 +2,8 @@
 
 from __future__ import annotations
 
-from seqseek import core, rank
-from seqseek.models import Match
+from oeis_seek import core, rank
+from oeis_seek.models import Match
 
 
 def test_raw_outranks_transformed():

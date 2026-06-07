@@ -25,12 +25,12 @@ dependencies = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/niarenaw/seqseek"
-Repository = "https://github.com/niarenaw/seqseek"
-Issues = "https://github.com/niarenaw/seqseek/issues"
+Homepage = "https://github.com/niarenaw/oeis-seek"
+Repository = "https://github.com/niarenaw/oeis-seek"
+Issues = "https://github.com/niarenaw/oeis-seek/issues"
 
 [project.scripts]
-seqseek = "seqseek.cli:main"
+oeis-seek = "oeis_seek.cli:main"
 
 [dependency-groups]
 dev = [
@@ -57,4 +57,4 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/seqseek"]
+packages = ["src/oeis_seek"]

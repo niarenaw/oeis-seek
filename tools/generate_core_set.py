@@ -1,6 +1,6 @@
 """Generate the embedded OEIS core-set data file.
 
-Run once at authoring time to refresh ``src/seqseek/data/core_sequences.txt``
+Run once at authoring time to refresh ``src/oeis_seek/data/core_sequences.txt``
 from OEIS's ``keyword:core`` query. The file is a committed, reviewed artifact;
 this script exists so the refresh is reproducible and validated rather than a
 one-off manual fetch. It is not shipped in the wheel and never runs at lookup
@@ -31,7 +31,7 @@ import urllib.request
 from datetime import UTC, datetime
 from pathlib import Path
 
-from seqseek.download import REQUEST_TIMEOUT, USER_AGENT
+from oeis_seek.download import REQUEST_TIMEOUT, USER_AGENT
 
 SEARCH_URL = "https://oeis.org/search"
 QUERY = "keyword:core"
@@ -40,7 +40,7 @@ MAX_EXPECTED = 250
 PAGE_LIMIT = 100  # OEIS serves anonymous results only for start <= 100
 WINDOW_REACH = PAGE_LIMIT + 10  # one extra page of ~10 past the cap, per sort direction
 TWO_WINDOW_REACH = 2 * WINDOW_REACH  # ceiling the asc+desc union can cover
-OUTPUT = Path(__file__).resolve().parents[1] / "src" / "seqseek" / "data" / "core_sequences.txt"
+OUTPUT = Path(__file__).resolve().parents[1] / "src" / "oeis_seek" / "data" / "core_sequences.txt"
 
 _A_NUMBER = re.compile(r"^A\d{6}$")
 _TOTAL = re.compile(r"Showing\s+\d+-\d+\s+of\s+(\d+)")

@@ -17,8 +17,8 @@ from pathlib import Path
 
 from platformdirs import user_cache_dir
 
-CACHE_DIR = Path(user_cache_dir("seqseek"))
-USER_AGENT = "seqseek/0.1 (+https://github.com/niarenaw/seqseek; OEIS sequence identifier)"
+CACHE_DIR = Path(user_cache_dir("oeis-seek"))
+USER_AGENT = "oeis-seek/0.1 (+https://github.com/niarenaw/oeis-seek; OEIS sequence identifier)"
 REQUEST_TIMEOUT = 60  # seconds
 
 # A correct dump is tens of MB; anything tiny is an error page or a truncation.
@@ -62,7 +62,7 @@ def download(timeout: int = REQUEST_TIMEOUT) -> Path:
     staged: dict[str, Path] = {}
 
     # Stage everything to temp files first; only promote once all succeed.
-    tmp_dir = Path(tempfile.mkdtemp(prefix="seqseek-dl-"))
+    tmp_dir = Path(tempfile.mkdtemp(prefix="oeis-seek-dl-"))
     try:
         for name, url in FILES.items():
             decompressed = _validate_and_decompress(_fetch(url, timeout))

@@ -6,9 +6,9 @@ import json
 
 import pytest
 
-from seqseek import cli
-from seqseek import index as index_mod
-from seqseek.models import Result
+from oeis_seek import cli
+from oeis_seek import index as index_mod
+from oeis_seek.models import Result
 
 _GOLDEN_RESULTS = [
     Result(
@@ -140,4 +140,4 @@ def test_missing_index_message(monkeypatch, capsys):
     monkeypatch.setattr(index_mod, "open_index", raise_missing)
     rc = cli.main(["2,3,5,8,13"])
     assert rc == 3
-    assert "seqseek update" in capsys.readouterr().err
+    assert "oeis-seek update" in capsys.readouterr().err

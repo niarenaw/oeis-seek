@@ -9,12 +9,12 @@ function. Every future surface (CLI today; web/API/MCP later) calls this.
 
 from __future__ import annotations
 
-from seqseek import rank
-from seqseek.index import Index
-from seqseek.matcher import find_matches
-from seqseek.models import Result
-from seqseek.transforms import REGISTRY
-from seqseek.transforms.normalize import strip_leading_zeros_and_ones
+from oeis_seek import rank
+from oeis_seek.index import Index
+from oeis_seek.matcher import find_matches
+from oeis_seek.models import Result
+from oeis_seek.transforms import REGISTRY
+from oeis_seek.transforms.normalize import strip_leading_zeros_and_ones
 
 # Lowest-distance transforms first, computed once: a candidate produced by several
 # transforms is then scanned and attributed to its strongest (lowest-distance) one.

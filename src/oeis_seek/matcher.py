@@ -9,8 +9,8 @@ subsequence predicate: term boundaries are enforced (``2,3`` cannot match inside
 
 from __future__ import annotations
 
-from seqseek.index import Index, frame_terms
-from seqseek.models import Match
+from oeis_seek.index import Index, frame_terms
+from oeis_seek.models import Match
 
 
 def find_matches(terms: list[int], index: Index) -> list[Match]:

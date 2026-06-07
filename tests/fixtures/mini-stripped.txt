@@ -1,4 +1,4 @@
-# OEIS fixture corpus for seqseek tests
+# OEIS fixture corpus for oeis-seek tests
 # Last Modified: January 01 00:00 UTC 2026
 A000044 ,1,1,1,2,3,5,8,13,21,34,55,89,144,
 A000045 ,0,1,1,2,3,5,8,13,21,34,55,89,144,
